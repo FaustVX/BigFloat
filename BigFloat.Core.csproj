@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>BigFloat</PackageId>
+    <Authors>FaustVX</Authors>
+    <Company>FaustVX</Company>
+    <Product>BigFloat</Product>
+    <PackageProjectUrl>https://github.com/FaustVX/BigFloat</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/FaustVX/BigFloat/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageTags>C# CSharp dotnet standard</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+</Project>

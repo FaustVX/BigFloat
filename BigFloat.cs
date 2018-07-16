@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace System.Numerics
         public readonly BigInteger Denominator;
 
         public static BigFloat One => new BigFloat(BigInteger.One);
-        public static BigFloat Zero => new BigFloat(BigFloat.Zero);
+        public static BigFloat Zero => new BigFloat(BigInteger.Zero);
         public static BigFloat MinusOne => new BigFloat(BigInteger.MinusOne);
         public static BigFloat OneHalf => new BigFloat(BigInteger.One, 2);
 
@@ -31,19 +32,18 @@ namespace System.Numerics
             }
         }
 
-
         //constructors
-        
+
         // default constructor if possible
         // public BigFloat()
         // {
         //     Numerator = BigInteger.Zero;
         //     Denominator = BigInteger.One;
         // }
-        
+
         public BigFloat(string value)
         {
-            BigFloat bf = Parse(value);
+            var bf = Parse(value);
             Numerator = bf.Numerator;
             Denominator = bf.Denominator;
         }
@@ -71,7 +71,6 @@ namespace System.Numerics
             }
             else
             {
-
                 Numerator = value.Numerator;
                 Denominator = value.Denominator;
             }
@@ -98,7 +97,7 @@ namespace System.Numerics
         { }
 
         public BigFloat(double value)
-            : this(value.ToString("N99")) 
+            : this(value.ToString("N99"))
         { }
 
         public BigFloat(decimal value)
@@ -128,17 +127,17 @@ namespace System.Numerics
         {
             if (object.Equals(other, null))
                 throw new ArgumentNullException(nameof(other));
-            
+
             return new BigFloat(value.Numerator * other.Numerator, value.Denominator * other.Denominator);
         }
 
         public static BigFloat Divide(BigFloat value, BigFloat other)
         {
-            if (BigInteger.Equals(other,null)) 
+            if (BigInteger.Equals(other,null))
                 throw new ArgumentNullException(nameof(other));
-            if (other.Numerator == 0) 
+            if (other.Numerator == 0)
                 throw new System.DivideByZeroException(nameof(other));
-            
+
             return new BigFloat(value.Numerator * other.Denominator, value.Denominator * other.Numerator);
         }
 
@@ -168,7 +167,7 @@ namespace System.Numerics
             }
             else if (exponent < 0)
             {
-                BigInteger savedNumerator = value.Numerator;
+                var savedNumerator = value.Numerator;
                 var numerator = BigInteger.Pow(value.Denominator, -exponent);
                 var denominator = BigInteger.Pow(savedNumerator, -exponent);
                 return new BigFloat(numerator, denominator);
@@ -218,7 +217,7 @@ namespace System.Numerics
             return Factor(new BigFloat(numerator, value.Denominator));
         }
 
-        public static BigFloat Round(BigFloat value) 
+        public static BigFloat Round(BigFloat value)
         {
             //get remainder. Over divisor see if it is > new BigFloat(0.5)
 
@@ -241,7 +240,7 @@ namespace System.Numerics
 
         public static BigFloat ShiftDecimalLeft(BigFloat value, int shift)
         {
-            if (shift < 0) 
+            if (shift < 0)
                 return ShiftDecimalRight(value, -shift);
 
             var numerator = value.Numerator * BigInteger.Pow(10, shift);
@@ -252,35 +251,28 @@ namespace System.Numerics
         {
             if (shift < 0)
                 return ShiftDecimalLeft(value, -shift);
-                
+
             var denominator = value.Denominator * BigInteger.Pow(10, shift);
             return new BigFloat(value.Numerator, denominator);
         }
 
         public static BigFloat Sqrt(BigFloat value)
-        {
-            return Divide(Math.Pow(10, BigInteger.Log10(value.Numerator) / 2), Math.Pow(10, BigInteger.Log10(value.Denominator) / 2));
-        }
+            => Divide(Math.Pow(10, BigInteger.Log10(value.Numerator) / 2), Math.Pow(10, BigInteger.Log10(value.Denominator) / 2));
 
         public static double Log10(BigFloat value)
-        {
-            return BigInteger.Log10(value.Numerator) - BigInteger.Log10(value.Denominator);
-        }
+            => BigInteger.Log10(value.Numerator) - BigInteger.Log10(value.Denominator);
 
         public static double Log(BigFloat value, double baseValue)
-        {
-            return BigInteger.Log(value.Numerator, baseValue) - BigInteger.Log(value.Numerator, baseValue);
-        }
+            => BigInteger.Log(value.Numerator, baseValue) - BigInteger.Log(value.Numerator, baseValue);
 
-        /// <summary> factoring can be very slow. So use only when neccessary (ToString, and comparisons) </summary>
-        private static BigFloat Factor(BigFloat value)
+        ///<summary> factoring can be very slow. So use only when neccessary (ToString, and comparisons) </summary>
+        public static BigFloat Factor(BigFloat value)
         {
-
-            if (value.Denominator == 1) 
+            if (value.Denominator == 1)
                 return value;
 
             //factor numerator and denominator
-            BigInteger factor = BigInteger.GreatestCommonDivisor(value.Numerator, value.Denominator);
+            var factor = BigInteger.GreatestCommonDivisor(value.Numerator, value.Denominator);
 
             return new BigFloat(value.Numerator / factor, value.Denominator / factor);
         }
@@ -291,28 +283,26 @@ namespace System.Numerics
             return ToString(100);
         }
 
-        public string ToString(int precision, bool trailingZeros = false) 
+        public string ToString(int precision, bool trailingZeros = false)
         {
             var value = Factor(this);
             var nf = CultureInfo.CurrentUICulture.NumberFormat;
 
-            BigInteger remainder;
-            BigInteger result = BigInteger.DivRem(value.Numerator, value.Denominator, out remainder);
+            var result = BigInteger.DivRem(value.Numerator, value.Denominator, out var remainder);
 
             if (remainder == 0 && trailingZeros)
                 return result + nf.NumberDecimalSeparator + "0";
             else if(remainder == 0)
                 return result.ToString();
 
-
-            BigInteger decimals = (value.Numerator * BigInteger.Pow(10, precision)) / value.Denominator;
+            var decimals = (value.Numerator * BigInteger.Pow(10, precision)) / value.Denominator;
 
             if (decimals == 0 && trailingZeros)
                 return result + nf.NumberDecimalSeparator + "0";
             else if(decimals == 0)
                 return result.ToString();
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             while (precision-- > 0 && decimals > 0)
             {
@@ -348,8 +338,8 @@ namespace System.Numerics
                 throw new ArgumentNullException(nameof(other));
 
             //Make copies
-            BigInteger one = Numerator;
-            BigInteger two = other.Numerator;
+            var one = Numerator;
+            var two = other.Numerator;
 
             //cross multiply
             one *= other.Denominator;
@@ -359,30 +349,27 @@ namespace System.Numerics
             return BigInteger.Compare(one, two);
         }
 
-        public int CompareTo(object other)
+        public int CompareTo(object obj)
         {
-            if (other == null)
-                throw new ArgumentNullException(nameof(other));
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
 
-            if (!(other is BigFloat)) 
-                throw new System.ArgumentException($"{nameof(other)} is not a {nameof(BigFloat)}");
+            if (!(obj is BigFloat))
+                throw new System.ArgumentException($"{nameof(obj)} is not a {nameof(BigFloat)}");
 
-            return CompareTo((BigFloat)other);
+            return CompareTo((BigFloat)obj);
         }
 
-        public override bool Equals(object other)
+        public override bool Equals(object obj)
         {
-            if (other == null || GetType() != other.GetType())
+            if (obj == null || GetType() != obj.GetType())
                 return false;
 
-            return Numerator == ((BigFloat)other).Numerator && Denominator == ((BigFloat)other).Denominator;
+            return Numerator == ((BigFloat)obj).Numerator && Denominator == ((BigFloat)obj).Denominator;
         }
 
         public bool Equals(BigFloat other)
-            => (other.Numerator == Numerator && other.Denominator == Denominator);
-
-        public override int GetHashCode()
-            => base.GetHashCode();
+            => other.Numerator == Numerator && other.Denominator == Denominator;
 
         //static methods
         public new static bool Equals(object left, object right)
@@ -393,13 +380,13 @@ namespace System.Numerics
                 return false;
             if (left.GetType() != right.GetType())
                 return false;
-            return (((BigInteger)left).Equals((BigInteger)right));
+            return ((BigInteger)left).Equals((BigInteger)right);
         }
 
         public static string ToString(BigFloat value)
             => value.ToString();
 
-        public static BigFloat Parse(string value) 
+        public static BigFloat Parse(string value)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
@@ -407,7 +394,7 @@ namespace System.Numerics
             value = value.Trim();
             var nf = CultureInfo.CurrentUICulture.NumberFormat;
             value = value.Replace(nf.NumberGroupSeparator, "");
-            int pos = value.IndexOf(nf.NumberDecimalSeparator);
+            var pos = value.IndexOf(nf.NumberDecimalSeparator);
             value = value.Replace(nf.NumberDecimalSeparator, "");
 
             if (pos < 0)
@@ -418,14 +405,14 @@ namespace System.Numerics
             else
             {
                 //decimal point (length - pos - 1)
-                BigInteger numerator = BigInteger.Parse(value);
-                BigInteger denominator = BigInteger.Pow(10, value.Length - pos);
+                var numerator = BigInteger.Parse(value);
+                var denominator = BigInteger.Pow(10, value.Length - pos);
 
                 return Factor(new BigFloat(numerator, denominator));
             }
         }
 
-        public static bool TryParse(string value, out BigFloat result) 
+        public static bool TryParse(string value, out BigFloat result)
         {
             try
             {
@@ -447,11 +434,20 @@ namespace System.Numerics
         public static int Compare(BigFloat left, BigFloat right)
         {
             if (object.Equals(left, null))
-                throw new ArgumentNullException("left");
-            if (BigFloat.Equals(right, null))
-                throw new ArgumentNullException("right");
+                throw new ArgumentNullException(nameof(left));
+            if (Equals(right, null))
+                throw new ArgumentNullException(nameof(right));
 
             return (new BigFloat(left)).CompareTo(right);
+        }
+
+        public override int GetHashCode()
+        {
+            const int prime = -1521134295;
+            var hashCode = -1534900553;
+            var equality = EqualityComparer<BigInteger>.Default;
+            hashCode = hashCode * prime + equality.GetHashCode(Numerator);
+            return hashCode * prime + equality.GetHashCode(Denominator);
         }
 
         public static BigFloat operator -(BigFloat value)
@@ -517,12 +513,12 @@ namespace System.Numerics
         public static bool operator false(BigFloat value)
             => value == 0;
 
-        public static explicit operator decimal(BigFloat value) 
-        { 
+        public static explicit operator decimal(BigFloat value)
+        {
             if (decimal.MinValue > value)
-                throw new System.OverflowException($"{nameof(value)} is less than decimal.MinValue.");
+                throw new OverflowException($"{nameof(value)} is less than decimal.MinValue.");
             if (decimal.MaxValue < value)
-                throw new System.OverflowException($"{nameof(value)} is greater than decimal.MaxValue.");
+                throw new OverflowException($"{nameof(value)} is greater than decimal.MaxValue.");
 
             return (decimal)value.Numerator / (decimal)value.Denominator;
         }
@@ -530,9 +526,9 @@ namespace System.Numerics
         public static explicit operator double(BigFloat value)
         {
             if (double.MinValue > value)
-                throw new System.OverflowException($"{nameof(value)} is less than double.MinValue.");
+                throw new OverflowException($"{nameof(value)} is less than double.MinValue.");
             if (double.MaxValue < value)
-                throw new System.OverflowException($"{nameof(value)} is greater than double.MaxValue.");
+                throw new OverflowException($"{nameof(value)} is greater than double.MaxValue.");
 
             return (double)value.Numerator / (double)value.Denominator;
         }
@@ -540,9 +536,9 @@ namespace System.Numerics
         public static explicit operator float(BigFloat value)
         {
             if (float.MinValue > value)
-                throw new System.OverflowException($"{nameof(value)} is less than float.MinValue.");
+                throw new OverflowException($"{nameof(value)} is less than float.MinValue.");
             if (float.MaxValue < value)
-                throw new System.OverflowException($"{nameof(value)} is greater than float.MaxValue.");
+                throw new OverflowException($"{nameof(value)} is greater than float.MaxValue.");
 
             return (float)value.Numerator / (float)value.Denominator;
         }
