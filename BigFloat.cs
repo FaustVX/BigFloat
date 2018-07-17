@@ -443,13 +443,7 @@ namespace System.Numerics
         }
 
         public override int GetHashCode()
-        {
-            const int prime = -1521134295;
-            var hashCode = -1534900553;
-            var equality = EqualityComparer<BigInteger>.Default;
-            hashCode = hashCode * prime + equality.GetHashCode(Numerator);
-            return hashCode * prime + equality.GetHashCode(Denominator);
-        }
+            => (Numerator, Denominator).GetHashCode();
 
         public static BigFloat operator -(BigFloat value)
             => Negate(value);
