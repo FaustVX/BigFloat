@@ -41,6 +41,7 @@ namespace System.Numerics
         //     Denominator = BigInteger.One;
         // }
 
+        [Obsolete("Use BigFloat.Parse instead.")]
         public BigFloat(string value)
         {
             var bf = Parse(value);
