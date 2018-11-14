@@ -305,7 +305,7 @@ namespace System.Numerics
 
             var sb = new StringBuilder();
 
-            while (precision-- > 0 && decimals > 0)
+            while (precision-- > 0)
             {
                 sb.Append(decimals%10);
                 decimals /= 10;
