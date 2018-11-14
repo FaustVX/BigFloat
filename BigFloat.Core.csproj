@@ -10,6 +10,7 @@
     <PackageProjectUrl>https://github.com/FaustVX/BigFloat</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/FaustVX/BigFloat/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>C# CSharp dotnet standard</PackageTags>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
