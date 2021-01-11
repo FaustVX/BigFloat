@@ -73,7 +73,7 @@ namespace UnitTests
 
             var c = new BigFloat(new BigInteger(-1), new BigInteger(-1));
             Assert.Equal(c, a);
-            
+
             var e = new BigFloat(new BigInteger(-1), new BigInteger(1));
             var f = new BigFloat(new BigInteger(2), new BigInteger(-2));
             Assert.Equal(e, f);
