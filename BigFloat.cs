@@ -53,7 +53,7 @@ namespace System.Numerics
             Numerator = numerator;
             if (denominator == 0)
                 throw new ArgumentException("denominator equals 0");
-            Denominator = BigInteger.Abs(denominator);
+            Denominator = denominator;
         }
 
         public BigFloat(BigInteger value)
@@ -442,7 +442,7 @@ namespace System.Numerics
         }
 
         public bool Equals(BigFloat other)
-            => other.Numerator == Numerator && other.Denominator == Denominator;
+            => other.Numerator * Denominator == Numerator * other.Denominator;
 
         public override int GetHashCode()
             => (Numerator, Denominator).GetHashCode();
