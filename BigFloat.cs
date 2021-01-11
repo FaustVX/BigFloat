@@ -40,7 +40,7 @@ namespace System.Numerics
         //     Denominator = BigInteger.One;
         // }
 
-        [Obsolete("Use BigFloat.Parse instead.")]
+        //[Obsolete("Use BigFloat.Parse instead.")]
         private BigFloat(string value)
         {
             var bf = Parse(value);
@@ -299,7 +299,7 @@ namespace System.Numerics
                 throw new ArgumentNullException(nameof(value));
 
             value = value.Trim();
-            var nf = CultureInfo.CurrentUICulture.NumberFormat;
+            var nf = Threading.Thread.CurrentThread.CurrentCulture.NumberFormat;
             value = value.Replace(nf.NumberGroupSeparator, "");
             var pos = value.IndexOf(nf.NumberDecimalSeparator);
             value = value.Replace(nf.NumberDecimalSeparator, "");
@@ -359,7 +359,7 @@ namespace System.Numerics
         public string ToString(int precision, bool trailingZeros = false)
         {
             var value = Factor(this);
-            var nf = CultureInfo.CurrentUICulture.NumberFormat;
+            var nf = Threading.Thread.CurrentThread.CurrentCulture.NumberFormat;
 
             var result = BigInteger.DivRem(value.Numerator, value.Denominator, out var remainder);
 
