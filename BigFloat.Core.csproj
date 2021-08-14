@@ -1,23 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>BigFloat</PackageId>
     <Authors>FaustVX</Authors>
     <Company>FaustVX</Company>
     <Product>BigFloat</Product>
     <PackageProjectUrl>https://github.com/FaustVX/BigFloat</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/FaustVX/BigFloat/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicense>https://github.com/FaustVX/BigFloat/blob/master/LICENSE</PackageLicense>
     <PackageTags>C# CSharp dotnet standard</PackageTags>
-    <Version>1.2</Version>
-    <LangVersion>7.2</LangVersion>
+    <Version>1.3-preview.1</Version>
+    <LangVersion>preview</LangVersion>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="BigFloat.UnitTest\**" />
     <EmbeddedResource Remove="BigFloat.UnitTest\**" />
     <None Remove="BigFloat.UnitTest\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.Experimental" Version="6.0.0-preview.7.21377.19" />
   </ItemGroup>
 
 </Project>
