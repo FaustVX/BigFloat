@@ -3,7 +3,7 @@ using System.Text;
 namespace System.Numerics;
 
 [Serializable]
-public readonly struct BigFloat : IComparable, IComparable<BigFloat>, IEquatable<BigFloat>
+public readonly partial struct BigFloat : IComparable, IComparable<BigFloat>, IEquatable<BigFloat>
 {
     public readonly BigInteger Numerator;
     public readonly BigInteger Denominator;
