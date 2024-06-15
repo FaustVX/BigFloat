@@ -24,12 +24,8 @@ namespace System.Numerics
 
         #region Constructors
 
-        // default constructor if possible
-        // public BigFloat()
-        // {
-        //     Numerator = BigInteger.Zero;
-        //     Denominator = BigInteger.One;
-        // }
+        public BigFloat()
+            => (Numerator, Denominator) = (BigInteger.Zero, BigInteger.One);
 
         private BigFloat(string value)
         {
