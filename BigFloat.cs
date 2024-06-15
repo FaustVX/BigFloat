@@ -15,20 +15,12 @@ namespace System.Numerics
         public static BigFloat OneHalf => new(BigInteger.One, 2);
 
         public int Sign
-        {
-            get
+            => (Numerator.Sign + Denominator.Sign) switch
             {
-                switch(Numerator.Sign + Denominator.Sign) {
-                    case 2:
-                    case -2:
-                        return 1;
-                    case 0:
-                        return -1;
-                    default:
-                        return 0;
-                }
-            }
-        }
+                2 or -2 => 1,
+                0 => -1,
+                _ => 0,
+            };
 
         #region Constructors
 
