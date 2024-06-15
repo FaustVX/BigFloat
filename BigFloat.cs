@@ -399,18 +399,18 @@ namespace System.Numerics
             if (obj == null)
                 throw new ArgumentNullException(nameof(obj));
 
-            if (!(obj is BigFloat))
-                throw new System.ArgumentException($"{nameof(obj)} is not a {nameof(BigFloat)}");
+            if (obj is not BigFloat bf)
+                throw new ArgumentException($"{nameof(obj)} is not a {nameof(BigFloat)}");
 
-            return CompareTo((BigFloat)obj);
+            return CompareTo(bf);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj is not BigFloat bf)
                 return false;
 
-            return Numerator == ((BigFloat)obj).Numerator && Denominator == ((BigFloat)obj).Denominator;
+            return Numerator == bf.Numerator && Denominator == bf.Denominator;
         }
 
         public bool Equals(BigFloat other)
