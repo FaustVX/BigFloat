@@ -11,7 +11,7 @@
     <PackageLicenseUrl>https://github.com/FaustVX/BigFloat/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>C# CSharp dotnet standard</PackageTags>
     <Version>1.2</Version>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

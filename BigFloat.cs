@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -10,10 +9,10 @@ namespace System.Numerics
         public readonly BigInteger Numerator;
         public readonly BigInteger Denominator;
 
-        public static BigFloat One => new BigFloat(BigInteger.One);
-        public static BigFloat Zero => new BigFloat(BigInteger.Zero);
-        public static BigFloat MinusOne => new BigFloat(BigInteger.MinusOne);
-        public static BigFloat OneHalf => new BigFloat(BigInteger.One, 2);
+        public static BigFloat One => new(BigInteger.One);
+        public static BigFloat Zero => new(BigInteger.Zero);
+        public static BigFloat MinusOne => new(BigInteger.MinusOne);
+        public static BigFloat OneHalf => new(BigInteger.One, 2);
 
         public int Sign
         {
@@ -113,7 +112,7 @@ namespace System.Numerics
                 throw new ArgumentNullException(nameof(other));
 
             var numerator = value.Numerator * other.Denominator + other.Numerator * value.Denominator;
-            return new BigFloat(numerator, value.Denominator * other.Denominator);
+            return new(numerator, value.Denominator * other.Denominator);
         }
 
         public static BigFloat Subtract(BigFloat value, BigFloat other)
@@ -122,7 +121,7 @@ namespace System.Numerics
                 throw new ArgumentNullException(nameof(other));
 
             var numerator = value.Numerator * other.Denominator - other.Numerator * value.Denominator;
-            return new BigFloat(numerator, value.Denominator * other.Denominator);
+            return new(numerator, value.Denominator * other.Denominator);
         }
 
         public static BigFloat Multiply(BigFloat value, BigFloat other)
@@ -130,7 +129,7 @@ namespace System.Numerics
             if (object.Equals(other, null))
                 throw new ArgumentNullException(nameof(other));
 
-            return new BigFloat(value.Numerator * other.Numerator, value.Denominator * other.Denominator);
+            return new(value.Numerator * other.Numerator, value.Denominator * other.Denominator);
         }
 
         public static BigFloat Divide(BigFloat value, BigFloat other)
@@ -138,9 +137,9 @@ namespace System.Numerics
             if (BigInteger.Equals(other, null))
                 throw new ArgumentNullException(nameof(other));
             if (other.Numerator == 0)
-                throw new System.DivideByZeroException(nameof(other));
+                throw new DivideByZeroException(nameof(other));
 
-            return new BigFloat(value.Numerator * other.Denominator, value.Denominator * other.Numerator);
+            return new(value.Numerator * other.Denominator, value.Denominator * other.Numerator);
         }
 
         public static BigFloat Remainder(BigFloat value, BigFloat other)
@@ -172,30 +171,30 @@ namespace System.Numerics
                 var savedNumerator = value.Numerator;
                 var numerator = BigInteger.Pow(value.Denominator, -exponent);
                 var denominator = BigInteger.Pow(savedNumerator, -exponent);
-                return new BigFloat(numerator, denominator);
+                return new(numerator, denominator);
             }
             else
             {
                 var numerator = BigInteger.Pow(value.Numerator, exponent);
                 var denominator = BigInteger.Pow(value.Denominator, exponent);
-                return new BigFloat(numerator, denominator);
+                return new(numerator, denominator);
             }
         }
 
         public static BigFloat Abs(BigFloat value)
-            => new BigFloat(BigInteger.Abs(value.Numerator), value.Denominator);
+            => new(BigInteger.Abs(value.Numerator), value.Denominator);
 
         public static BigFloat Negate(BigFloat value)
-            => new BigFloat(BigInteger.Negate(value.Numerator), value.Denominator);
+            => new(BigInteger.Negate(value.Numerator), value.Denominator);
 
         public static BigFloat Inverse(BigFloat value)
-            => new BigFloat(value.Denominator, value.Numerator);
+            => new(value.Denominator, value.Numerator);
 
         public static BigFloat Increment(BigFloat value)
-            => new BigFloat(value.Numerator + value.Denominator, value.Denominator);
+            => new(value.Numerator + value.Denominator, value.Denominator);
 
         public static BigFloat Decrement(BigFloat value)
-            => new BigFloat(value.Numerator - value.Denominator, value.Denominator);
+            => new(value.Numerator - value.Denominator, value.Denominator);
 
         public static BigFloat Ceil(BigFloat value)
         {
@@ -205,7 +204,7 @@ namespace System.Numerics
             else
                 numerator += value.Denominator - BigInteger.Remainder(numerator, value.Denominator);
 
-            return Factor(new BigFloat(numerator, value.Denominator));
+            return Factor(new(numerator, value.Denominator));
         }
 
         public static BigFloat Floor(BigFloat value)
@@ -216,7 +215,7 @@ namespace System.Numerics
             else
                 numerator -= BigInteger.Remainder(numerator, value.Denominator);
 
-            return Factor(new BigFloat(numerator, value.Denominator));
+            return Factor(new(numerator, value.Denominator));
         }
 
         public static BigFloat Round(BigFloat value)
@@ -234,11 +233,11 @@ namespace System.Numerics
             var numerator = value.Numerator;
             numerator -= BigInteger.Remainder(numerator, value.Denominator);
 
-            return Factor(new BigFloat(numerator, value.Denominator));
+            return Factor(new(numerator, value.Denominator));
         }
 
         public static BigFloat Decimals(BigFloat value)
-            => new BigFloat(BigInteger.Remainder(value.Numerator, value.Denominator), value.Denominator);
+            => new(BigInteger.Remainder(value.Numerator, value.Denominator), value.Denominator);
 
         public static BigFloat ShiftDecimalLeft(BigFloat value, int shift)
         {
@@ -246,7 +245,7 @@ namespace System.Numerics
                 return ShiftDecimalRight(value, -shift);
 
             var numerator = value.Numerator * BigInteger.Pow(10, shift);
-            return new BigFloat(numerator, value.Denominator);
+            return new(numerator, value.Denominator);
         }
 
         public static BigFloat ShiftDecimalRight(BigFloat value, int shift)
@@ -255,7 +254,7 @@ namespace System.Numerics
                 return ShiftDecimalLeft(value, -shift);
 
             var denominator = value.Denominator * BigInteger.Pow(10, shift);
-            return new BigFloat(value.Numerator, denominator);
+            return new(value.Numerator, denominator);
         }
 
         public static BigFloat Sqrt(BigFloat value)
@@ -276,7 +275,7 @@ namespace System.Numerics
             //factor numerator and denominator
             var factor = BigInteger.GreatestCommonDivisor(value.Numerator, value.Denominator);
 
-            return new BigFloat(value.Numerator / factor, value.Denominator / factor);
+            return new(value.Numerator / factor, value.Denominator / factor);
         }
         public new static bool Equals(object left, object right)
         {
@@ -314,7 +313,7 @@ namespace System.Numerics
                 var numerator = BigInteger.Parse(value);
                 var denominator = BigInteger.Pow(10, value.Length - pos);
 
-                return Factor(new BigFloat(numerator, denominator));
+                return Factor(new(numerator, denominator));
             }
         }
 
@@ -344,7 +343,7 @@ namespace System.Numerics
             if (Equals(right, null))
                 throw new ArgumentNullException(nameof(right));
 
-            return (new BigFloat(left)).CompareTo(right);
+            return new BigFloat(left).CompareTo(right);
         }
 
         #endregion
@@ -548,43 +547,43 @@ namespace System.Numerics
         }
 
         public static implicit operator BigFloat(byte value)
-            => new BigFloat((uint)value);
+            => new((uint)value);
 
         public static implicit operator BigFloat(sbyte value)
-            => new BigFloat((int)value);
+            => new(value);
 
         public static implicit operator BigFloat(short value)
-            => new BigFloat((int)value);
+            => new(value);
 
         public static implicit operator BigFloat(ushort value)
-            => new BigFloat((uint)value);
+            => new((uint)value);
 
         public static implicit operator BigFloat(int value)
-            => new BigFloat(value);
+            => new(value);
 
         public static implicit operator BigFloat(long value)
-            => new BigFloat(value);
+            => new(value);
 
         public static implicit operator BigFloat(uint value)
-            => new BigFloat(value);
+            => new(value);
 
         public static implicit operator BigFloat(ulong value)
-            => new BigFloat(value);
+            => new(value);
 
         public static implicit operator BigFloat(decimal value)
-            => new BigFloat(value);
+            => new(value);
 
         public static implicit operator BigFloat(double value)
-            => new BigFloat(value);
+            => new(value);
 
         public static implicit operator BigFloat(float value)
-            => new BigFloat(value);
+            => new(value);
 
         public static implicit operator BigFloat(BigInteger value)
-            => new BigFloat(value);
+            => new(value);
 
         public static explicit operator BigFloat(string value)
-            => new BigFloat(value);
+            => new(value);
 
         #endregion
     }
