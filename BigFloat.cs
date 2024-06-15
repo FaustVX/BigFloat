@@ -38,7 +38,7 @@ namespace System.Numerics
         {
             Numerator = numerator;
             if (denominator == 0)
-                throw new ArgumentException("denominator equals 0");
+                throw new DivideByZeroException($"{nameof(denominator)} equals 0");
             Denominator = denominator;
         }
 
