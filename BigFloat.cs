@@ -433,6 +433,9 @@ namespace System.Numerics
         public override int GetHashCode()
             => (Numerator, Denominator).GetHashCode();
 
+        private void Deconstruct(out BigInteger numerator, out BigInteger denominator)
+            => (numerator, denominator) = (Numerator, Denominator);
+
         #endregion
 
         #region Operators
