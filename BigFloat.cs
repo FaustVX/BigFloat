@@ -28,38 +28,24 @@ namespace System.Numerics
             => (Numerator, Denominator) = (BigInteger.Zero, BigInteger.One);
 
         private BigFloat(string value)
-        {
-            var bf = Parse(value);
-            Numerator = bf.Numerator;
-            Denominator = bf.Denominator;
-        }
+            => (Numerator, Denominator) = Parse(value);
 
         public BigFloat(BigInteger numerator, BigInteger denominator)
         {
-            Numerator = numerator;
             if (denominator == 0)
                 throw new DivideByZeroException($"{nameof(denominator)} equals 0");
-            Denominator = denominator;
+            (Numerator, Denominator) = (numerator, denominator);
         }
 
         public BigFloat(BigInteger value)
-        {
-            Numerator = value;
-            Denominator = BigInteger.One;
-        }
+            => (Numerator, Denominator) = (value, BigInteger.One);
 
         public BigFloat(BigFloat value)
         {
             if (object.Equals(value, null))
-            {
-                Numerator = BigInteger.Zero;
-                Denominator = BigInteger.One;
-            }
+                (Numerator, Denominator) = (BigInteger.Zero, BigInteger.One);
             else
-            {
-                Numerator = value.Numerator;
-                Denominator = value.Denominator;
-            }
+                (Numerator, Denominator) = value;
         }
 
         public BigFloat(ulong value)
